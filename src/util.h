@@ -2,6 +2,7 @@
 #ifndef __CHART_DISCOVERY_UTIL_H
 #define __CHART_DISCOVERY_UTIL_H
 
+#include <vector>
 
 /**
   * It's used to normalize the input sequence, and the vertical value range is [0, 1].
@@ -9,6 +10,6 @@
   * seq: input time series data points.
   * return: none.
   */
-void normalize(vector<double> &seq);
+void normalize(std::vector<double> &seq);
 
 #endif

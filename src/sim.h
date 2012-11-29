@@ -3,6 +3,9 @@
 #define __CHART_DISCOVERY_SIM_H
 
 #include "define.h"
+#include "pip.h"
+
+#include <vector>
 
 
 /**
@@ -11,6 +14,15 @@
   * sb: another time series data points.
   * return: cross-correlation between sa and sb.
   */
-double xcorr(const vector<double> &sa, const vector<double> &sb);
+double xcorr(const std::vector<PIP> &sa, const std::vector<PIP> &sb);
+
+/**
+  * euclidean_distance, computes the euclidean distance between sa.y and sb.y.
+  * It's a little ugly for the prototype of this funtion.
+  * sa: one PIP sequence.
+  * sb: another PIP sequence.
+  * return: Euclidean distance of them.
+  */
+double euclidean_distance(const std::vector<PIP> &sa, const std::vector<PIP> &sb);
 
 #endif

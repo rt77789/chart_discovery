@@ -1,8 +1,9 @@
 
 #include "util.h"
 #include <cmath>
+#include <cstdlib>
 
-void normalize(vector<double> &seq) {
+void normalize(std::vector<double> &seq) {
 	double mean = 0;
 	double sum_square = 0;
 	for(size_t i = 0; i < seq.size(); ++i) {

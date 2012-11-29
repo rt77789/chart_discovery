@@ -3,6 +3,8 @@
 #include <cmath>
 #include <cstdlib>
 #include <cassert>
+#include <cstring>
+#include <algorithm>
 
 void ts_sliding_window(const std::vector<double>& seq, double max_error, std::vector<int>& segs) {
 	int anchor = 0;
@@ -18,20 +20,58 @@ void ts_sliding_window(const std::vector<double>& seq, double max_error, std::ve
 	}
 }
 
+void ts_top_down_point_limit(const std::vector<double>& seq, int left, int right, size_t max_point, std::vector<PIP>& pips) {
+	
+	if(left + 1 >= right) return;
 
-void ts_top_down(const std::vector<double>& seq, int left, int right, double max_error, std::vector<int>& segs) {
+	pips.push_back(PIP(left, seq[left]));
+	pips.push_back(PIP(right, seq[right]));
+
+	bool mask[right - left + 1];
+	memset(mask, 0, sizeof(mask));
+
+	mask[left - left] = mask[right - left] = true;
+
+	while(pips.size() < max_point) {
+		int mini = -1;
+		double temp = -INF;
+
+		for(size_t j = 1; j < pips.size(); ++j) {
+			for(int i = pips[j-1].x+1; i < pips[j].x; ++i) {
+
+				double err = ts_cal_vd(left, right, i, seq[left], seq[right], seq[i]);	
+				//printf("%lf, %d\n", err, i);
+				if(err > temp) {
+					temp = err;
+					mini = i;
+				}
+			}
+		}
+
+		if(mini == -1 && pips.size() < max_point) {
+			//			fprintf(stderr, "pips.size(): %u\n", pips.size());
+			fprintf(stderr, "mini == -1 && pips.size() < max_point\n");
+			exit(0);
+		}
+		pips.push_back(PIP(mini, seq[mini]));
+		sort(pips.begin(), pips.end());
+		//mask[mini-left] = true;
+	}
+}
+
+void ts_top_down_error_limit(const std::vector<double>& seq, int left, int right, double max_error, std::vector<int>& segs) {
 	
 	if(left + 1 >= right) return;
 
 	int mini = -1;
-	double temp = 1e200;
+	double temp = -INF;
 
 	for(int i = left + 1; i < right; ++i) {
-		double err = ts_cal_pd(left, right, i, seq[left], seq[right], seq[i]);	
-		if(err < temp) {
+		double err = ts_cal_vd(left, right, i, seq[left], seq[right], seq[i]);	
+			//printf("%lf, %d\n", err, i);
+		if(err > temp) {
 			temp = err;
 			mini = i;
-			//cout << temp << endl;
 		}
 	}
 
@@ -39,10 +79,10 @@ void ts_top_down(const std::vector<double>& seq, int left, int right, double max
 	segs.push_back(mini);
 
 	if(ts_cal_error(seq, left, mini) > max_error) {
-		ts_top_down(seq, left, mini, max_error, segs);
+		ts_top_down_error_limit(seq, left, mini, max_error, segs);
 	}
 	if(ts_cal_error(seq, mini, right) > max_error) {
-		ts_top_down(seq, mini, right, max_error, segs);
+		ts_top_down_error_limit(seq, mini, right, max_error, segs);
 	}
 }
 

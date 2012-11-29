@@ -1,29 +1,32 @@
 
 #include "sim.h"
 
+#include <cassert>
+#include <cmath>
 
-double xcorr(const vector<double> &sa, const vector<double> &sb) {
+
+double xcorr(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
 	double ma = 0, mb = 0; 
 	assert(sa.size() == sb.size());
 	int len = sa.size();
 
 	for(int i = 0; i < len; ++i) {
-		ma += sa[i];
-		mb += sb[i];
+		ma += sa[i].y;
+		mb += sb[i].y;
 	}
 
 	ma /= len;
 	mb /= len;
 
 	double res = -INF;
-	int offset = -INF;
+	int offset = -1;
 
 	double deta = 0;
 	double detb = 0;
 
 	for(int i = 0; i < len; ++i) {
-		deta += (sa[i] - ma) * (sa[i] - ma);
-		detb += (sb[i] - mb) * (sb[i] - mb);
+		deta += (sa[i].y - ma) * (sa[i].y - ma);
+		detb += (sb[i].y - mb) * (sb[i].y - mb);
 	}
 
 	deta = sqrt(deta * detb);
@@ -34,7 +37,7 @@ double xcorr(const vector<double> &sa, const vector<double> &sb) {
 		int d = dp;
 		double num = 0;
 		for(int i = 0; i < len; ++i) {
-			num += (sa[i] - ma) * (sb[((i + d) % len + len) %len] - mb);
+			num += (sa[i].y - ma) * (sb[((i + d) % len + len) %len].y - mb);
 		}
 
 		double rd = num / deta;
@@ -44,4 +47,12 @@ double xcorr(const vector<double> &sa, const vector<double> &sb) {
 		}
 	}
 	return offset, res;
+}
+
+double euclidean_distance(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
+	double sum = 0;
+	for(size_t i = 0; i < sa.size(); ++i) {
+		sum += (sa[i].y - sb[i].y) * (sa[i].y - sb[i].y);
+	}
+	return exp(-sum);
 }
