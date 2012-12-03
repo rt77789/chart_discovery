@@ -6,10 +6,10 @@
 
 TEST(SimTest, SimTest1) {
 	using namespace std;
-	vector<PIP> sa, sb;
+	vector<double> sa, sb;
 	for(int i = -10; i <= 10; ++i) {
-		sa.push_back(PIP(i, 1. * i));
-		sb.push_back(PIP(i, 1. * i));
+		sa.push_back(1. * i);
+		sb.push_back(1. * i);
 	}
 
 	//normalize(sa);
@@ -18,6 +18,6 @@ TEST(SimTest, SimTest1) {
 	cout << xcorr(sa, sb) << endl;
 
 	for(size_t i = 0; i < sa.size(); ++i) {
-		cout << i << " " << sa[i].y << " " << sb[i].y << endl;
+		cout << i << " " << sa[i] << " " << sb[i] << endl;
 	}
 }

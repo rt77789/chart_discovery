@@ -14,15 +14,15 @@
   * sb: another time series data points.
   * return: cross-correlation between sa and sb.
   */
-double xcorr(const std::vector<PIP> &sa, const std::vector<PIP> &sb);
+double xcorr(const std::vector<double> &sa, const std::vector<double> &sb);
 
 /**
-  * euclidean_distance, computes the euclidean distance between sa.y and sb.y.
+  * euclidean_distance, computes the euclidean distance between sa and sb.
   * It's a little ugly for the prototype of this funtion.
-  * sa: one PIP sequence.
-  * sb: another PIP sequence.
+  * sa: one time series data point.
+  * sb: another time series data point.
   * return: Euclidean distance of them.
   */
-double euclidean_distance(const std::vector<PIP> &sa, const std::vector<PIP> &sb);
+double euclidean_distance(const std::vector<double> &sa, const std::vector<double> &sb);
 
 #endif

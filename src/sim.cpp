@@ -5,14 +5,14 @@
 #include <cmath>
 
 
-double xcorr(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
+double xcorr(const std::vector<double> &sa, const std::vector<double> &sb) {
 	double ma = 0, mb = 0; 
 	assert(sa.size() == sb.size());
 	int len = sa.size();
 
 	for(int i = 0; i < len; ++i) {
-		ma += sa[i].y;
-		mb += sb[i].y;
+		ma += sa[i];
+		mb += sb[i];
 	}
 
 	ma /= len;
@@ -25,8 +25,8 @@ double xcorr(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
 	double detb = 0;
 
 	for(int i = 0; i < len; ++i) {
-		deta += (sa[i].y - ma) * (sa[i].y - ma);
-		detb += (sb[i].y - mb) * (sb[i].y - mb);
+		deta += (sa[i] - ma) * (sa[i] - ma);
+		detb += (sb[i] - mb) * (sb[i] - mb);
 	}
 
 	deta = sqrt(deta * detb);
@@ -37,7 +37,7 @@ double xcorr(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
 		int d = dp;
 		double num = 0;
 		for(int i = 0; i < len; ++i) {
-			num += (sa[i].y - ma) * (sb[((i + d) % len + len) %len].y - mb);
+			num += (sa[i] - ma) * (sb[((i + d) % len + len) %len] - mb);
 		}
 
 		double rd = num / deta;
@@ -49,10 +49,10 @@ double xcorr(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
 	return offset, res;
 }
 
-double euclidean_distance(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
+double euclidean_distance(const std::vector<double> &sa, const std::vector<double> &sb) {
 	double sum = 0;
 	for(size_t i = 0; i < sa.size(); ++i) {
-		sum += (sa[i].y - sb[i].y) * (sa[i].y - sb[i].y);
+		sum += (sa[i] - sb[i]) * (sa[i] - sb[i]);
 	}
 	return exp(-sum);
 }

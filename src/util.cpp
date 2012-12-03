@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-void normalize(std::vector<double> &seq) {
+void stardard_norm(std::vector<double> &seq) {
 	double mean = 0;
 	double sum_square = 0;
 	for(size_t i = 0; i < seq.size(); ++i) {
@@ -25,5 +25,22 @@ void normalize(std::vector<double> &seq) {
 
 	for(size_t i = 0; i < seq.size(); ++i) {
 		seq[i] /= sum_square;
+	}
+}
+
+void uniform_norm(std::vector<double> &seq) {
+	double min = INF;
+	double max = -INF;
+
+	for(size_t i = 0; i < seq.size(); ++i) {
+		min = min < seq[i] ? min : seq[i];
+		max = max > seq[i] ? max : seq[i];
+	}
+
+	// [0, 1] range.
+	if(max - min >= EPS) {
+		for(size_t i = 0; i < seq.size(); ++i) {
+			seq[i] = (seq[i] - min) / (max - min);
+		}
 	}
 }

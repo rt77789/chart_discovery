@@ -1,5 +1,7 @@
 
 #include "chart.h"
+#include "util.h"
+
 #include <cmath> 
 #include <cassert>
 
@@ -25,8 +27,18 @@ void chart_discover(const std::vector<double> &ts, const Pattern &temp, std::vec
 double chart_cal_sim(const Pattern &temp, const Pattern &candi) {
 	// Simple Receporal Euclidean Distance.
 	assert(temp.size() == candi.size());
+
+	std::vector<double> t(temp.pips.size()), c(candi.pips.size());
+
+	for(size_t i = 0; i < temp.size(); ++i)
+		t[i] = temp.pips[i].y;
+	for(size_t i = 0; i < candi.size(); ++i)
+		c[i] = candi.pips[i].y;
+
+	uniform_norm(t);
+	uniform_norm(c);
 	
 	//return euclidean_distance(temp.pips, candi.pips);
-	return xcorr(temp.pips, candi.pips);
+	return xcorr(t, c);
 }
 

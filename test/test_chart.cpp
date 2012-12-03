@@ -15,8 +15,8 @@ TEST(ChartTest, ChartTest1) {
 	vector<Pattern> candidates;
 	double data[] = {0, 0.4, 0.9, 0.6, 1.1, 0.5, 0};
 	vector<double> ts(data, data + 7);
-	//double tv[] = {0, 0.5, 1, 0.5, 1, 0.5, 0};
-	double tv[] = {0, 0, 0, 0, 0, 0, 0};
+	double tv[] = {0, 0.5, 1, 0.5, 1, 0.5, 0};
+	//double tv[] = {0, 0, 0, 0, 0, 0, 0};
 	//double tv[] = {0, 0.4, 0.9, 0.6, 1.1, 0.5, 0};
 	
 

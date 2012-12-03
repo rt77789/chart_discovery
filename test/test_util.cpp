@@ -10,9 +10,18 @@ TEST(UtilTest, UtilTest1) {
 		seq.push_back(1. * i);
 	}
 
-	normalize(seq);
+	stardard_norm(seq);
+	cout << "stardard_norm\n";
+	for(size_t i = 0; i < seq.size(); ++i) {
+		cout << i << " " << seq[i] << endl;
+	}
+
+	cout << "uniform_norm\n";
+
+	uniform_norm(seq);
 
 	for(size_t i = 0; i < seq.size(); ++i) {
 		cout << i << " " << seq[i] << endl;
 	}
+
 }
