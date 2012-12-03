@@ -1,5 +1,7 @@
 
 #include "ts.h"
+#include "util.h"
+
 #include <cmath>
 #include <cstdlib>
 #include <cassert>
@@ -99,6 +101,33 @@ double ts_cal_error(const std::vector<double>& seq, int left, int right) {
 	}
 
 	return temp;
+}
+
+/**
+  * This function computes the sum of squared vertical errors.
+  * return the sum / #points.
+  * seq: the time series data points.
+  * pips: the PIP data.
+  * return: sum / #points.
+  */
+double ts_cal_sum_error(const std::vector<double> &seq, int left, int right, const std::vector<PIP> &pips) {
+	std::vector<double> slice(seq.begin() + left, seq.begin() + right + 1);
+	uniform_norm(slice);
+
+	double sum = 0;
+	int min = pips.size() > 0 ? pips[0].x : -(1<<30);
+	int max = pips.size() > 0 ? pips[0].x : 1<<30;
+
+	for(size_t i = 1; i < pips.size(); ++i) {
+		max = max > pips[i].x ? max : pips[i].x;
+		min = min < pips[i].x ? min : pips[i].x;
+
+		for(int j = pips[i-1].x; j < pips[i].x; ++j) {
+			double vd = ts_cal_vd(pips[i-1].x, pips[i].x, j, slice[pips[i-1].x - left], slice[pips[i].x - left], slice[j - left]);
+			sum += vd * vd;
+		}
+	}
+	return sum / (max - min + 1);
 }
 
 double ts_cal_vd(int x1, int x2, int x3, double y1, double y2, double y3) {

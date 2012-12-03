@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <cstdlib>
+#include <cassert>
 
 /**
   * PIP structure, Perceptually Important Point.
@@ -30,6 +31,7 @@ struct PIP {
 struct Pattern {
 	std::vector<PIP> pips;
 	double sim;
+	double err;
 
 	size_t size() const {
 		return pips.size();
@@ -43,6 +45,7 @@ struct Pattern {
 
 	bool operator<(const Pattern &p) const {
 		return sim > p.sim;
+		//return err < p.err;
 	}
 };
 
@@ -60,6 +63,23 @@ struct Interval {
 			left > in.left ? false : 
 			right < in.right ? true : false;
 	}
+};
+
+/**
+  * Chart template class, singleton.
+  */
+
+class ChartTemp {
+	public:
+		static size_t size();
+		static Pattern& at(int i);
+		static void init();
+	private:
+		std::vector<Pattern> _temp;
+		ChartTemp();
+		~ChartTemp();
+
+		static ChartTemp& instance();
 };
 
 #endif

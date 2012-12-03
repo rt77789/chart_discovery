@@ -9,17 +9,21 @@
 void chart_discover(const std::vector<double> &ts, const Pattern &temp, std::vector<Pattern> &candi) {
 
 	size_t min_window = temp.size()-1;
-	size_t max_window = min_window << 1;
+	size_t max_window = min_window << 3;
 
 	for(size_t i = min_window; i < ts.size(); ++i) {
 		for(size_t w = min_window; w <= max_window && i >= w; ++w) {
 			std::vector<PIP> pips;
 			ts_top_down_point_limit(ts, i-w, i, temp.size(), pips);
+			double err = ts_cal_sum_error(ts, i-w, i, pips);
 
 			// Compute similarity.
 			Pattern can(pips, 0);
 			can.sim = chart_cal_sim(temp, can);
-			candi.push_back(can);
+			can.err = err;
+			if(err < 0.1) {
+				candi.push_back(can);
+			}
 		}
 	}
 }
@@ -39,6 +43,8 @@ double chart_cal_sim(const Pattern &temp, const Pattern &candi) {
 	uniform_norm(c);
 	
 	//return euclidean_distance(temp.pips, candi.pips);
-	return xcorr(t, c);
+	//return euclidean_distance(t, c); //xcorr(t, c);
+	//return cos_angle(t, c);
+	return trend_simimar(temp.pips, candi.pips);
 }
 
