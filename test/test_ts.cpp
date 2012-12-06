@@ -48,3 +48,11 @@ TEST(TsTest, TsTest3) {
 		cout << segs[i].x << " " << segs[i].y << endl;
 	}
 }
+
+TEST(TsTest, ts_cal_pd) {
+	using namespace std;
+	int x1 = 1, x2 = 3, x3 = 2;
+	double y1 = 1, y2 = 3, y3 = 3;
+	double dis = ts_cal_pd(x1, x2, x3, y1, y2, y3);
+	cout << dis << endl;
+}

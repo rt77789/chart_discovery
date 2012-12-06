@@ -14,7 +14,10 @@ ChartTemp::~ChartTemp() {
 
 void ChartTemp::init() {
 	// Initialize the templates patterns.
+	// Big M.
 	double tv[] = {0, 0.5, 1, 0.5, 1, 0.5, 0};
+	// Head and Shoulder.
+	//double tv[] = {0, 0.7, 0.5, 1, 0.5, 0.7, 0};
 	Pattern pat;
 	for(int i = 0; i < 7; ++i) {
 		pat.pips.push_back(PIP(i, tv[i]));

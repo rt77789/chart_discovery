@@ -83,4 +83,15 @@ double ts_cal_pd(int x1, int x2, int x3, double y1, double y2, double y3);
   */
 double ts_cal_sum_error(const std::vector<double> &seq, int left, int right, const std::vector<PIP> &pips);
 
+/**
+  * This function computes the max vertical error.
+  * return the max error.
+  * seq: the time series data points.
+  * left: left boundary of time series.
+  * right: right boundary of time series.
+  * pips: the PIP data.
+  * return: max_error.
+  */
+double ts_cal_max_error(const std::vector<double> &seq, int left, int right, const std::vector<PIP> &pips);
+
 #endif

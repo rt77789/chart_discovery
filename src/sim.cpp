@@ -54,7 +54,8 @@ double euclidean_distance(const std::vector<double> &sa, const std::vector<doubl
 	for(size_t i = 0; i < sa.size(); ++i) {
 		sum += (sa[i] - sb[i]) * (sa[i] - sb[i]);
 	}
-	return exp(-sum);
+	//return exp(-sum);
+	return 1 - sqrt(sum)/sa.size();
 }
 
 double cos_angle(const std::vector<double> &sa, const std::vector<double> &sb) {
@@ -68,6 +69,16 @@ double cos_angle(const std::vector<double> &sa, const std::vector<double> &sb) {
 	return fabs(aa * bb) < EPS ? 1 : sum / (sqrt(aa * bb) );
 }
 
+double horizontal_distance(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
+	assert(sa.size() == sb.size());
+
+	double sum = 0;
+	for(size_t i = 0; i < sa.size(); ++i) {
+		sum += (sa[i].x - sb[i].x) * (sa[i].x - sb[i].x);
+	}
+	return 1 - sqrt(sum)/sa.size();
+}
+
 double trend_simimar(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
 	std::vector<double> ta(sa.size()-1), tb(sb.size()-1);
 	assert(sa.size() == sb.size());
@@ -78,9 +89,32 @@ double trend_simimar(const std::vector<PIP> &sa, const std::vector<PIP> &sb) {
 	}
 	return euclidean_distance(ta, tb); //cos_angle(ta, tb);
 }
-/*
-double manhattan_distance() {
+double manhattan_distance(const std::vector<double> &sa, const std::vector<double> &sb) {
+	double sum = 0;
+	for(size_t i = 0; i < sa.size(); ++i) {
+		sum += fabs(sa[i] - sb[i]);
+	}
+	return 1 - sum/sa.size();
 }
+
+double hausdorff_distance(const std::vector<double> &sa, const std::vector<double> &sb) {
+	double res = 0;
+	for(size_t i = 0 ; i< sa.size(); ++i) {
+		res = res > fabs(sa[i] - sb[i]) ? res : fabs(sa[i] - sb[i]);
+	}
+	return 1-res;
+}
+double hamming_distance(const std::vector<double> &sa, const std::vector<double> &sb) {
+	assert(sa.size() == sb.size());
+	double sim = 0;
+	for(size_t i = 1; i < sa.size(); ++i) {
+		if((sa[i] - sa[i-1]) * (sb[i] - sb[i-1]) > 0) ++sim;
+	}
+	return sa.size() > 1 ? sim / (sa.size() - 1) : 1;
+}
+
+
+/*
 double chebyshev_distance() {
 }
 double minkowski_distance() {
@@ -88,8 +122,6 @@ double minkowski_distance() {
 double standard_euclidean_distance() {
 }
 double mahalanobis_distance() {
-}
-double hamming_distance() {
 }
 double jaccard_coff() {
 }

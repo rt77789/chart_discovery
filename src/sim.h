@@ -43,4 +43,34 @@ double cos_angle(const std::vector<double> &sa, const std::vector<double> &sb);
   */
 double trend_simimar(const std::vector<PIP> &sa, const std::vector<PIP> &sb);
 
+/**
+  * Manhattan distance, computes the manhattan distance between sa and sb.
+  * It's a little ugly for the prototype of this funtion.
+  * sa: one time series data point.
+  * sb: another time series data point.
+  * return: sum(fabs(sa - sb)) / length.
+  */
+double manhattan_distance(const std::vector<double> &sa, const std::vector<double> &sb);
+
+/**
+  * Hausdorff distance, maximum distance between sa[i] and sb[i].
+  * sa: one time series data point.
+  * sb: another time series data point.
+  * return: max (sa[i] - sb[i]).
+  */
+double hausdorff_distance(const std::vector<double> &sa, const std::vector<double> &sb);
+
+/**
+  * Hamming distance, (sa[i+1] - sa[i]) * (sb[i+1] - sb[i]) > 0, then sim++;
+  * sa: one time series data point.
+  * sb: another time series data point.
+  * return: # of (sa[i+1] - sa[i]) * (sb[i+1] - sb[i]) > 0.
+  */
+double hamming_distance(const std::vector<double> &sa, const std::vector<double> &sb);
+
+/**
+  * horizontal distance, x-axes.
+  */
+double horizontal_distance(const std::vector<PIP> &sa, const std::vector<PIP> &sb);
+
 #endif

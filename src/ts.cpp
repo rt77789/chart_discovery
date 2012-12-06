@@ -41,7 +41,7 @@ void ts_top_down_point_limit(const std::vector<double>& seq, int left, int right
 		for(size_t j = 1; j < pips.size(); ++j) {
 			for(int i = pips[j-1].x+1; i < pips[j].x; ++i) {
 
-				double err = ts_cal_vd(left, right, i, seq[left], seq[right], seq[i]);	
+				double err = ts_cal_vd(pips[j-1].x, pips[j].x, i, seq[pips[j-1].x], seq[pips[j].x], seq[i]);	
 				//printf("%lf, %d\n", err, i);
 				if(err > temp) {
 					temp = err;
@@ -130,14 +130,36 @@ double ts_cal_sum_error(const std::vector<double> &seq, int left, int right, con
 	return sum / (max - min + 1);
 }
 
+/* Similar to cal_sum_error, but use the maximum error instead.*/
+double ts_cal_max_error(const std::vector<double> &seq, int left, int right, const std::vector<PIP> &pips) {
+	std::vector<double> slice(seq.begin() + left, seq.begin() + right + 1);
+	uniform_norm(slice);
+
+	double maxerr = 0;
+	int min = pips.size() > 0 ? pips[0].x : -(1<<30);
+	int max = pips.size() > 0 ? pips[0].x : 1<<30;
+
+	for(size_t i = 1; i < pips.size(); ++i) {
+		max = max > pips[i].x ? max : pips[i].x;
+		min = min < pips[i].x ? min : pips[i].x;
+
+		for(int j = pips[i-1].x; j < pips[i].x; ++j) {
+			double vd = ts_cal_vd(pips[i-1].x, pips[i].x, j, slice[pips[i-1].x - left], slice[pips[i].x - left], slice[j - left]);
+			//double vd = ts_cal_pd(pips[i-1].x, pips[i].x, j, slice[pips[i-1].x - left], slice[pips[i].x - left], slice[j - left]);
+			maxerr = vd > maxerr ? vd : maxerr;
+		}
+	}
+	return maxerr;
+}
+
 double ts_cal_vd(int x1, int x2, int x3, double y1, double y2, double y3) {
 	double cy = y1 + (y2 - y1) * (x3 - x1) / (x2 - x1);
 	return fabs(cy - y3);
 }
 
 double ts_cal_pd(int x1, int x2, int x3, double y1, double y2, double y3) {
-	double th1 = atan(y2 - y1) / (x2 - x1);
-	double th2 = atan(y3 - y1) / (x3 - x1);
+	double th1 = atan((y2 - y1) / (x2 - x1));
+	double th2 = atan((y3 - y1) / (x3 - x1));
 	double th = fabs(th1 - th2);
 	double e = sqrt(pow(x3 - x1, 2) + pow(y3 - x1, 2));
 	return e * sin(th);
