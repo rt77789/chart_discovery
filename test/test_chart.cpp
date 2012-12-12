@@ -23,7 +23,7 @@ TEST(ChartTest, ChartTest1) {
 	for(int i = 0; i < 7; ++i) 
 		temp.pips.push_back(PIP(i, tv[i]));
 
-	chart_discover(ts, temp, candidates);
+	local_chart_discover(ts, temp, candidates);
 
 	EXPECT_EQ(candidates.size() > 0, true);
 

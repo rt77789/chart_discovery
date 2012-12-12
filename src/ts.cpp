@@ -22,17 +22,47 @@ void ts_sliding_window(const std::vector<double>& seq, double max_error, std::ve
 	}
 }
 
-void ts_top_down_point_limit(const std::vector<double>& seq, int left, int right, size_t max_point, std::vector<PIP>& pips) {
+
+void ts_pip_detect_error_limit(const std::vector<double>& seq, int left, int right, double max_error, std::vector<PIP>& pips) {
 	
 	if(left + 1 >= right) return;
 
 	pips.push_back(PIP(left, seq[left]));
 	pips.push_back(PIP(right, seq[right]));
 
-	bool mask[right - left + 1];
-	memset(mask, 0, sizeof(mask));
+	while(1) {
+		int mini = -1;
+		int pindx = -1;
+		double temp = -INF;
 
-	mask[left - left] = mask[right - left] = true;
+		for(size_t j = 1; j < pips.size(); ++j) {
+			for(int i = pips[j-1].x+1; i < pips[j].x; ++i) {
+
+				double err = ts_cal_vd(pips[j-1].x, pips[j].x, i, seq[pips[j-1].x], seq[pips[j].x], seq[i]);	
+				//printf("%lf, %d\n", err, i);
+				if(err > temp) {
+					temp = err;
+					mini = i;
+					pindx = j-1;
+				}
+			}
+		}
+		if(mini == -1 || temp / fabs(pips[pindx+1].y - pips[pindx].y) < max_error) {
+			break;
+		}
+		pips.push_back(PIP(mini, seq[mini]));
+		sort(pips.begin(), pips.end());
+	}
+}
+
+
+
+void ts_top_down_point_limit(const std::vector<double>& seq, int left, int right, size_t max_point, std::vector<PIP>& pips) {
+	
+	if(left + 1 >= right) return;
+
+	pips.push_back(PIP(left, seq[left]));
+	pips.push_back(PIP(right, seq[right]));
 
 	while(pips.size() < max_point) {
 		int mini = -1;
@@ -57,7 +87,6 @@ void ts_top_down_point_limit(const std::vector<double>& seq, int left, int right
 		}
 		pips.push_back(PIP(mini, seq[mini]));
 		sort(pips.begin(), pips.end());
-		//mask[mini-left] = true;
 	}
 }
 

@@ -55,7 +55,7 @@ void run() {
 	for(size_t i = 0; i < ChartTemp::size(); ++i) {
 		//cout << "after ChartTemp::size()\n";
 		vector<Pattern> candi;
-		chart_discover(ts, ChartTemp::at(i), candi);
+		global_chart_discover(ts, ChartTemp::at(i), candi);
 
 		// sort the answers by similarity.
 		sort(candi.begin(), candi.end());

@@ -39,6 +39,17 @@ void ts_top_down_error_limit(const std::vector<double>& seq, int left, int right
 void ts_top_down_point_limit(const std::vector<double>& seq, int left, int right, size_t max_point, std::vector<PIP>& pips);
 
 /**
+  * ts_pip_detect_error_limit, detects the pips for the original time series sequence, limited by relative error threshold; it's used to detect global pips.
+  * seq: the time series data points.
+  * left: the left boundary of interval [left, right].
+  * right: the right boundary of interval [left, right].
+  * max_error: maximum relative error rate.
+  * pips: PIPs std::vector of original sequence, x denotes index and y denotes value.
+  * return: none.
+  */
+void ts_pip_detect_error_limit(const std::vector<double>& seq, int left, int right, double max_error, std::vector<PIP>& pips);
+
+/**
   * ts_cal_error, calculate the maximum distance (error) of interval [left, right].
   * seq: the time series data points.
   * left: the left boundary of interval.

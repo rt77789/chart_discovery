@@ -49,6 +49,20 @@ TEST(TsTest, TsTest3) {
 	}
 }
 
+TEST(TsTest, ts_pip_detect_error_limit) {
+	using namespace std;
+	vector<PIP> segs;
+	double max_error = 1;
+	double ts[] = {0, 0.6, 1, 0.4, 0};
+	vector<double> seq(ts, ts + 5);
+
+	ts_pip_detect_error_limit(seq, 0, seq.size()-1, 0.1, segs);
+	cout << "ts_pip_detect_error_limit unit test\n";
+	for(size_t i = 0; i < segs.size(); ++i) {
+		cout << segs[i].x << " " << segs[i].y << endl;
+	}
+}
+
 TEST(TsTest, ts_cal_pd) {
 	using namespace std;
 	int x1 = 1, x2 = 3, x3 = 2;
